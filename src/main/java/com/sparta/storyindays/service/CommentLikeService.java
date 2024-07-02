@@ -4,7 +4,7 @@ import com.sparta.storyindays.entity.Comment;
 import com.sparta.storyindays.entity.CommentLike;
 import com.sparta.storyindays.entity.Post;
 import com.sparta.storyindays.entity.User;
-import com.sparta.storyindays.repository.CommentLikeRepository;
+import com.sparta.storyindays.repository.comment.CommentLikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;

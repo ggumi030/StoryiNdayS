@@ -9,12 +9,14 @@ import com.sparta.storyindays.entity.User;
 import com.sparta.storyindays.enums.post.PostType;
 import com.sparta.storyindays.enums.user.Auth;
 import com.sparta.storyindays.exception.BusinessLogicException;
-import com.sparta.storyindays.repository.CommentRepository;
-import com.sparta.storyindays.repository.PostRepository;
+import com.sparta.storyindays.repository.comment.CommentRepository;
+import com.sparta.storyindays.repository.post.PostLikeRepository;
+import com.sparta.storyindays.repository.post.PostRepository;
 import com.sparta.storyindays.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,7 @@ public class PostService {
     private final UserService userService;
     private final FollowService followService;
     private final CommentRepository commentRepository;
+    private final PostLikeRepository postLikeRepository;
     private final MessageSource messageSource;
 
     public PostResDto writePost(PostReqDto reqDto, User user) {
@@ -177,7 +180,23 @@ public class PostService {
             commentResDtos.add(new CommentResDto(comment.getId(), comment.getUser().getUsername(), comment.getComment(), comment.getCreatedAt()));
         }
 
-        return new PostCommentResDto(commentResDtos, curPost);
+        Long postLikeCount = postLikeRepository.getPostLikeCount(curPost);
+
+        return new PostCommentResDto(commentResDtos, curPost, postLikeCount);
+    }
+
+    public PostGetResDto getLikePost(User user, int page, int size) {
+        List<Post> posts = postLikeRepository.getPostILike(user);
+
+        PageRequest pageRequest = PageRequest.of(page,size);
+
+        List<PostUpdateResDto> postUpdateResDtos = postRepository.getPostWithPageAndSortCreatedAtDesc(pageRequest.getOffset(),pageRequest.getPageSize())
+            .stream()
+            .map(PostUpdateResDto::new)
+            .toList();
+
+        return new PostGetResDto(postUpdateResDtos);
+
     }
 
     public Post findById(long id) {

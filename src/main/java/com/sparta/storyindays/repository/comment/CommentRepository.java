@@ -1,4 +1,4 @@
-package com.sparta.storyindays.repository;
+package com.sparta.storyindays.repository.comment;
 
 import com.sparta.storyindays.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;

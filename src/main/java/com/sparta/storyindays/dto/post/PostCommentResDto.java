@@ -12,9 +12,11 @@ public class PostCommentResDto {
 
     private PostUpdateResDto postUpdateResDto;
     private List<CommentResDto> commentResDtoList;
+    private Long postLikeCount;
 
-    public PostCommentResDto(List<CommentResDto> commentResDtoList, Post post) {
+    public PostCommentResDto(List<CommentResDto> commentResDtoList, Post post, Long postLikeCount) {
         this.commentResDtoList = commentResDtoList;
-        postUpdateResDto = new PostUpdateResDto(post);
+        this.postUpdateResDto = new PostUpdateResDto(post);
+        this.postLikeCount = postLikeCount;
     }
 }

@@ -34,6 +34,12 @@ public class CommentController {
         return ResponseEntity.ok().body(new CommonResDto<>(HttpStatus.OK.value(), "댓글 조회에 성공하였습니다!", resDto));
     }
 
+    @GetMapping("/posts/{postId}/comments/{commentId}")
+    public ResponseEntity<CommonResDto<CommentResDto>> getComment(@PathVariable(name = "postId") long postId, @PathVariable(name = "commentId") long commentId) {
+        CommentResDto resDto = commentService.getComment(postId,commentId);
+        return ResponseEntity.ok().body(new CommonResDto<>(HttpStatus.OK.value(), commentId + "번 댓글 조회에 성공하였습니다!", resDto));
+    }
+
     @PutMapping("/posts/{postId}/comments/{commentId}")
     public ResponseEntity<CommonResDto<CommentResDto>> updateComment(@PathVariable(name = "postId") long postId, @PathVariable(name = "commentId") long commentId, @Valid @RequestBody CommentUpdateReqDto reqDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CommentResDto resDto = commentService.updateComment(postId, commentId, reqDto, userDetails.getUser());

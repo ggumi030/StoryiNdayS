@@ -2,6 +2,8 @@ package com.sparta.storyindays.controller;
 
 import com.sparta.storyindays.dto.CommonResDto;
 import com.sparta.storyindays.dto.post.*;
+import com.sparta.storyindays.entity.Post;
+import com.sparta.storyindays.entity.User;
 import com.sparta.storyindays.security.UserDetailsImpl;
 import com.sparta.storyindays.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +62,18 @@ public class PostController {
         return ResponseEntity.ok().body(new CommonResDto<>(HttpStatus.OK.value()
                 , userName + "의 게시글 조회에 성공했습니다!"
                 , updateResDtoList));
+    }
+
+    @GetMapping("/posts/likes")
+    public ResponseEntity<CommonResDto<PostGetResDto>> getLikePost(
+        @AuthenticationPrincipal UserDetailsImpl userDetails
+        ,@RequestParam("page") int page) {
+        User user = userDetails.getUser();
+
+        PostGetResDto getResDto = postService.getLikePost(user, page, 5);
+        return ResponseEntity.ok().body(new CommonResDto<>(HttpStatus.OK.value(),
+            user.getUsername() + "이 좋아요를 눌렀던 게시글 조회에 성공했습니다!",
+            getResDto));
     }
 
     @PutMapping("/posts/{postId}")
