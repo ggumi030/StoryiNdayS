@@ -1,14 +1,25 @@
 package com.sparta.storyindays.service;
 
-import com.sparta.storyindays.dto.user.*;
-import com.sparta.storyindays.dto.user.admin.*;
+import com.sparta.storyindays.dto.user.PasswordUpdateReqDto;
+import com.sparta.storyindays.dto.user.ProfileResDto;
+import com.sparta.storyindays.dto.user.ProfileUpdateReqDto;
+import com.sparta.storyindays.dto.user.ProfileUpdateResDto;
+import com.sparta.storyindays.dto.user.admin.AdminAuthReqDto;
+import com.sparta.storyindays.dto.user.admin.AdminAuthResDto;
+import com.sparta.storyindays.dto.user.admin.AdminStateReqDto;
+import com.sparta.storyindays.dto.user.admin.AdminStateResDto;
+import com.sparta.storyindays.dto.user.admin.AdminUsersResDto;
 import com.sparta.storyindays.entity.PasswordHistory;
 import com.sparta.storyindays.entity.User;
 import com.sparta.storyindays.enums.user.Auth;
 import com.sparta.storyindays.enums.user.State;
 import com.sparta.storyindays.repository.PasswordHistoryRepository;
 import com.sparta.storyindays.repository.UserRepository;
+import com.sparta.storyindays.repository.comment.CommentLikeRepository;
+import com.sparta.storyindays.repository.post.PostLikeRepository;
 import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -20,9 +31,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Locale;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -30,12 +38,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final PasswordHistoryRepository passwordHistoryRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final CommentLikeRepository commentLikeRepository;
     private final MessageSource messageSource;
 
     // 프로필 조회
     public ProfileResDto getProfile(Long userId) {
         User user = findById(userId);
-        ProfileResDto profileResDto = new ProfileResDto(user);
+        ProfileResDto profileResDto = new ProfileResDto(user,postLikeRepository.getPostCountILike(user),commentLikeRepository.getCommentCountILike(user));
         return profileResDto;
     }
 

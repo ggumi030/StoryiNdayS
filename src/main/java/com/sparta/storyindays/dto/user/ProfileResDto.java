@@ -16,8 +16,10 @@ public class ProfileResDto {
     private String instroduction;
     private Auth auth;
     private State state;
+    private int postLike;
+    private int commentLike;
 
-    public ProfileResDto(User user) {
+    public ProfileResDto(User user, int postLike, int commentLike) {
         this.id = user.getId();
         this.name = user.getName();
         this.username = user.getUsername();
@@ -25,5 +27,7 @@ public class ProfileResDto {
         this.instroduction = user.getIntroduction();
         this.auth = user.getAuth();
         this.state = user.getState();
+        this.postLike = postLike;
+        this.commentLike = commentLike;
     }
 }

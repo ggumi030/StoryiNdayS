@@ -39,7 +39,7 @@ public class CommentService {
 
         Post post = postService.findById(postId);
         Comment comment = findComment(commentId);
-        Long commentLikeCount = commentLikeRepository.getCommentLikeCount(comment);
+        int commentLikeCount = commentLikeRepository.getCommentLikeCount(comment);
 
         return new CommentResDto(comment.getId(), comment.getUser().getUsername(), comment.getComment(), comment.getCreatedAt(),commentLikeCount);
     }

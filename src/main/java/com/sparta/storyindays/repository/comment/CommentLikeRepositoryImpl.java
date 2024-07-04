@@ -19,15 +19,17 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepositoryCustom{
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Long getCommentLikeCount(Comment comment){
+    public int getCommentLikeCount(Comment comment){
         QCommentLike commentLike = QCommentLike.commentLike1;
 
-        return jpaQueryFactory
+        Long count = jpaQueryFactory
             .select(commentLike.count())
             .from(commentLike)
             .where(commentLike.comment.eq(comment))
             .where(commentLike.commentLike.eq(true))
             .fetchFirst();
+
+        return count != null ? count.intValue() : 0;
     }
 
     @Override
@@ -48,5 +50,19 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepositoryCustom{
             .orderBy(orderSpecifier)
             .fetch();
 
+    }
+
+    @Override
+    public int getCommentCountILike(User user){
+        QCommentLike commentLike1 = QCommentLike.commentLike1;
+
+        Long count = jpaQueryFactory
+            .select(commentLike1.count())
+            .from(commentLike1)
+            .where(commentLike1.user.eq(user)
+                .and(commentLike1.commentLike.eq(true)))
+            .fetchFirst();
+
+        return count != null ? count.intValue() : 0;
     }
 }

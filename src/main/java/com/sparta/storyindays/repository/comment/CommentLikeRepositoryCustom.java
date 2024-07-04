@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommentLikeRepositoryCustom {
-    Long getCommentLikeCount(Comment comment);
+    int getCommentLikeCount(Comment comment);
     List<Comment> getCommentILike(User user,int page, int size);
-
+    int getCommentCountILike(User user);
 }

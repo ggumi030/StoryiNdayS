@@ -180,7 +180,7 @@ public class PostService {
             commentResDtos.add(new CommentResDto(comment.getId(), comment.getUser().getUsername(), comment.getComment(), comment.getCreatedAt()));
         }
 
-        Long postLikeCount = postLikeRepository.getPostLikeCount(curPost);
+        int postLikeCount = postLikeRepository.getPostLikeCount(curPost);
 
         return new PostCommentResDto(commentResDtos, curPost, postLikeCount);
     }

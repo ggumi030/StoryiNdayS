@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostLikeRepositoryCustom {
-    Long getPostLikeCount(Post post);
+    int getPostLikeCount(Post post);
     List<Post> getPostILike(User user, int page, int size);
+    int getPostCountILike(User user);
 }

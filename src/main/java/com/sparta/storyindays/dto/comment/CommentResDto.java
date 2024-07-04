@@ -15,7 +15,7 @@ public class CommentResDto {
 
     private LocalDateTime createdAt;
 
-    private Long commentLikeCount = 0L;
+    private int commentLikeCount = 0;
 
     public CommentResDto(Long commentId, String username, String comment, LocalDateTime createdAt) {
         this.commentId = commentId;
@@ -24,7 +24,7 @@ public class CommentResDto {
         this.createdAt = createdAt;
     }
 
-    public CommentResDto(Long commentId, String username, String comment, LocalDateTime createdAt, Long commentLikeCount) {
+    public CommentResDto(Long commentId, String username, String comment, LocalDateTime createdAt, int commentLikeCount) {
         this.commentId = commentId;
         this.username = username;
         this.comment = comment;

@@ -4,7 +4,6 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.storyindays.entity.Post;
-import com.sparta.storyindays.entity.PostLike;
 import com.sparta.storyindays.entity.QPost;
 import com.sparta.storyindays.entity.QPostLike;
 import com.sparta.storyindays.entity.User;
@@ -20,15 +19,17 @@ public class PostLikeRepositoryImpl implements PostLikeRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Long getPostLikeCount(Post post) {
+    public int getPostLikeCount(Post post) {
         QPostLike postLike1 = QPostLike.postLike1;
 
-        return jpaQueryFactory
+        Long count = jpaQueryFactory
             .select(postLike1.count())
             .from(postLike1)
             .where(postLike1.post.eq(post))
             .where(postLike1.postLike.eq(true))
             .fetchFirst();
+
+        return count != null ? count.intValue() : 0;
     }
 
     @Override
@@ -49,6 +50,20 @@ public class PostLikeRepositoryImpl implements PostLikeRepositoryCustom {
            .orderBy(orderSpecifier)
            .fetch();
 
+    }
+
+    @Override
+    public int getPostCountILike(User user) {
+        QPostLike postLike1 = QPostLike.postLike1;
+
+        Long count = jpaQueryFactory
+            .select(postLike1.count())
+            .from(postLike1)
+            .where(postLike1.user.eq(user)
+                .and(postLike1.postLike.eq(true)))
+            .fetchFirst();
+
+        return count != null ? count.intValue() : 0;
     }
 
 }
