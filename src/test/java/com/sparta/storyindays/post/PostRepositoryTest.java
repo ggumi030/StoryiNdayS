@@ -42,8 +42,10 @@ public class PostRepositoryTest {
             .where(postLike1.postLike.eq(true))
             .fetchFirst();
 
+        int intCount = count != null ? count.intValue() : 0;
+
         //then
-        assertEquals(count, 1);
+        assertEquals(intCount, 1);
     }
 
     @Test
