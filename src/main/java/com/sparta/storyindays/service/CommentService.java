@@ -55,6 +55,15 @@ public class CommentService {
         return commentResDtos;
     }
 
+    public List<CommentResDto> getLikeComment(User user, int page, int size) {
+        List<Comment> comments = commentLikeRepository.getCommentILike(user,page,size);
+
+        return comments
+            .stream()
+            .map(comment-> new CommentResDto(comment.getId(),comment.getUser().getUsername(),comment.getComment(),comment.getCreatedAt()))
+            .toList();
+    }
+
     @Transactional
     public CommentResDto updateComment(long postId, long commentId, CommentUpdateReqDto reqDto, User user) {
 
@@ -144,5 +153,4 @@ public class CommentService {
                         Locale.getDefault()
                 )));
     }
-
 }

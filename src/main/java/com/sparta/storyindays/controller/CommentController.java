@@ -4,6 +4,7 @@ import com.sparta.storyindays.dto.CommonResDto;
 import com.sparta.storyindays.dto.comment.CommentCreateReqDto;
 import com.sparta.storyindays.dto.comment.CommentResDto;
 import com.sparta.storyindays.dto.comment.CommentUpdateReqDto;
+import com.sparta.storyindays.entity.User;
 import com.sparta.storyindays.security.UserDetailsImpl;
 import com.sparta.storyindays.service.CommentService;
 import jakarta.validation.Valid;
@@ -38,6 +39,13 @@ public class CommentController {
     public ResponseEntity<CommonResDto<CommentResDto>> getComment(@PathVariable(name = "postId") long postId, @PathVariable(name = "commentId") long commentId) {
         CommentResDto resDto = commentService.getComment(postId,commentId);
         return ResponseEntity.ok().body(new CommonResDto<>(HttpStatus.OK.value(), commentId + "번 댓글 조회에 성공하였습니다!", resDto));
+    }
+
+    @GetMapping("/comments/likes")
+    public ResponseEntity<CommonResDto<List<CommentResDto>>> getLikeComment(@RequestParam(name = "page") int page, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        List<CommentResDto> resDto = commentService.getLikeComment(user, page, 5);
+        return ResponseEntity.ok().body(new CommonResDto<>(HttpStatus.OK.value(),"좋아요를 누른 댓글 목록 조회에 성공하였습니다!", resDto));
     }
 
     @PutMapping("/posts/{postId}/comments/{commentId}")

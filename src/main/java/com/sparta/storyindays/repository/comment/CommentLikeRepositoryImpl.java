@@ -1,9 +1,15 @@
 package com.sparta.storyindays.repository.comment;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.storyindays.entity.Comment;
+import com.sparta.storyindays.entity.QComment;
 import com.sparta.storyindays.entity.QCommentLike;
+import com.sparta.storyindays.entity.User;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -22,5 +28,25 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepositoryCustom{
             .where(commentLike.comment.eq(comment))
             .where(commentLike.commentLike.eq(true))
             .fetchFirst();
+    }
+
+    @Override
+    public List<Comment> getCommentILike(User user, int page, int size){
+        QComment comment1 = QComment.comment1;
+        QCommentLike commentLike1 = QCommentLike.commentLike1;
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+        OrderSpecifier<?> orderSpecifier = new OrderSpecifier<>(Order.DESC,comment1.createdAt);
+
+        return jpaQueryFactory
+            .selectFrom(comment1)
+            .leftJoin(commentLike1).on(comment1.id.eq(commentLike1.comment.id))
+            .where(commentLike1.user.eq(user)
+                .and(commentLike1.commentLike.eq(true)))
+            .offset(pageRequest.getOffset())
+            .limit(pageRequest.getPageSize())
+            .orderBy(orderSpecifier)
+            .fetch();
+
     }
 }
