@@ -20,7 +20,7 @@ public class Follow {
     @Column(name = "follow_user_id",nullable = false)
     String followUserId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "followee_user_id")
     User followeeUser;
 

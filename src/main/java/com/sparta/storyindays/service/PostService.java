@@ -186,11 +186,10 @@ public class PostService {
     }
 
     public PostGetResDto getLikePost(User user, int page, int size) {
-        List<Post> posts = postLikeRepository.getPostILike(user);
 
-        PageRequest pageRequest = PageRequest.of(page,size);
+        List<Post> posts = postLikeRepository.getPostILike(user,page,size);
 
-        List<PostUpdateResDto> postUpdateResDtos = postRepository.getPostWithPageAndSortCreatedAtDesc(pageRequest.getOffset(),pageRequest.getPageSize())
+        List<PostUpdateResDto> postUpdateResDtos = posts
             .stream()
             .map(PostUpdateResDto::new)
             .toList();

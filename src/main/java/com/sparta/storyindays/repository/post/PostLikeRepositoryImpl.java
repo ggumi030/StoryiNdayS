@@ -10,6 +10,7 @@ import com.sparta.storyindays.entity.QPostLike;
 import com.sparta.storyindays.entity.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -31,17 +32,23 @@ public class PostLikeRepositoryImpl implements PostLikeRepositoryCustom {
     }
 
     @Override
-    public List<Post> getPostILike(User user) {
+    public List<Post> getPostILike(User user,int page, int size) {
         QPostLike postLike1 = QPostLike.postLike1;
+        QPost post = QPost.post;
 
-        return jpaQueryFactory
-            .selectFrom(postLike1)
-            .where(postLike1.user.eq(user))
-            .where(postLike1.postLike.eq(true))
-            .fetch()
-            .stream()
-            .map(PostLike::getPost)
-            .toList();
+        PageRequest pageRequest = PageRequest.of(page,size);
+        OrderSpecifier<?> orderSpecifier = new OrderSpecifier<>(Order.DESC, post.createdAt);
+
+       return jpaQueryFactory
+           .selectFrom(post)
+           .leftJoin(postLike1).on(post.id.eq(postLike1.post.id))
+           .where(postLike1.user.eq(user)
+               .and(postLike1.postLike.eq(true)))
+           .offset(pageRequest.getOffset())
+           .limit(pageRequest.getPageSize())
+           .orderBy(orderSpecifier)
+           .fetch();
+
     }
 
 }
