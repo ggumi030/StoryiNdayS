@@ -1,5 +1,6 @@
 package com.sparta.storyindays.service;
 
+import com.sparta.storyindays.dto.user.FollowerTop10ProfileResDto;
 import com.sparta.storyindays.dto.user.ProfileUpdateResDto;
 import com.sparta.storyindays.entity.Follow;
 import com.sparta.storyindays.entity.User;
@@ -92,5 +93,9 @@ public class FollowService {
             }
         }
         return false;
+    }
+
+    public List<FollowerTop10ProfileResDto> getFollowerTop10() {
+        return followRepository.getFollowerTop10Profile();
     }
 }
