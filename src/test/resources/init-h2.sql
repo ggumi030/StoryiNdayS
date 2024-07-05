@@ -1,4 +1,4 @@
-create table users
+create table db_user
 (
     id            bigint auto_increment primary key,
     username      varchar(30)  not null,
@@ -23,7 +23,7 @@ create table post
     created_at  timestamp default current_timestamp,
     modified_at timestamp default current_timestamp,
 
-    constraint fk_tb_user_tb_post foreign key (user_id) references users (id)
+    constraint fk_tb_user_tb_post foreign key (user_id) references db_user (id)
 );
 
 create table post_like
@@ -34,7 +34,7 @@ create table post_like
     user_id   bigint not null,
 
 
-    constraint fk_users_post_like foreign key (user_id) references users (id),
+    constraint fk_users_post_like foreign key (user_id) references db_user (id),
     constraint fk_post_post_like foreign key (post_id) references post (id)
 );
 
@@ -47,19 +47,29 @@ create table comment
     created_at  timestamp default current_timestamp,
     modified_at timestamp default current_timestamp,
 
-    constraint fk_user_comment foreign key (user_id) references users (id),
+    constraint fk_user_comment foreign key (user_id) references db_user (id),
     constraint fk_post_comment foreign key (post_id) references post (id)
 );
 
 create table comment_like
 (
-    id         bigint auto_increment primary key,
-    comment_id bigint not null,
-    post_id bigint not null,
-    user_id bigint not null,
+    id           bigint auto_increment primary key,
+    comment_id   bigint not null,
+    post_id      bigint not null,
+    user_id      bigint not null,
     comment_like boolean,
 
     constraint fk_comment_comment_like foreign key (comment_id) references comment (id),
     constraint fk_post_comment_like foreign key (post_id) references post (id),
-    constraint fk_user_comment_like foreign key (user_id) references users (id)
+    constraint fk_user_comment_like foreign key (user_id) references db_user (id)
+);
+
+create table follow
+(
+    id               bigint auto_increment primary key,
+    follow_check     boolean      not null,
+    follow_user_id   varchar(100) not null,
+    followee_user_id bigint       not null,
+
+    constraint fk_user_follow foreign key (followee_user_id) references db_user (id)
 );
