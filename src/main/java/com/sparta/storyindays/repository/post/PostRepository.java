@@ -1,4 +1,4 @@
-package com.sparta.storyindays.repository;
+package com.sparta.storyindays.repository.post;
 
 import com.sparta.storyindays.entity.Post;
 import com.sparta.storyindays.entity.User;
@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryCustom {
     List<Post> findAllByPostType(PostType postType);
 
     List<Post> findAllByPostTypeAndIsPinned(PostType postType, boolean isPinned);

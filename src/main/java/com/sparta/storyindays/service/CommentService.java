@@ -7,7 +7,8 @@ import com.sparta.storyindays.entity.Comment;
 import com.sparta.storyindays.entity.Post;
 import com.sparta.storyindays.entity.User;
 import com.sparta.storyindays.enums.user.Auth;
-import com.sparta.storyindays.repository.CommentRepository;
+import com.sparta.storyindays.repository.comment.CommentLikeRepository;
+import com.sparta.storyindays.repository.comment.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostService postService;
+    private final CommentLikeRepository commentLikeRepository;
     private final MessageSource messageSource;
 
     @Transactional
@@ -31,6 +33,15 @@ public class CommentService {
         Post post = postService.findById(postId);
         Comment comment = commentRepository.save(new Comment(reqDto.getComment(), post, user));
         return new CommentResDto(comment.getId(), comment.getUser().getUsername(), comment.getComment(), comment.getCreatedAt());
+    }
+
+    public CommentResDto getComment(long postId, long commentId) {
+
+        Post post = postService.findById(postId);
+        Comment comment = findComment(commentId);
+        int commentLikeCount = commentLikeRepository.getCommentLikeCount(comment);
+
+        return new CommentResDto(comment.getId(), comment.getUser().getUsername(), comment.getComment(), comment.getCreatedAt(),commentLikeCount);
     }
 
     public List<CommentResDto> getAllComment(long postId) {
@@ -42,6 +53,15 @@ public class CommentService {
             commentResDtos.add(new CommentResDto(comment.getId(), comment.getUser().getUsername(), comment.getComment(), comment.getCreatedAt()));
         }
         return commentResDtos;
+    }
+
+    public List<CommentResDto> getLikeComment(User user, int page, int size) {
+        List<Comment> comments = commentLikeRepository.getCommentILike(user,page,size);
+
+        return comments
+            .stream()
+            .map(comment-> new CommentResDto(comment.getId(),comment.getUser().getUsername(),comment.getComment(),comment.getCreatedAt()))
+            .toList();
     }
 
     @Transactional
@@ -133,6 +153,4 @@ public class CommentService {
                         Locale.getDefault()
                 )));
     }
-
-
 }

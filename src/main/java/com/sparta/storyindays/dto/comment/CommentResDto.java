@@ -15,10 +15,20 @@ public class CommentResDto {
 
     private LocalDateTime createdAt;
 
+    private int commentLikeCount = 0;
+
     public CommentResDto(Long commentId, String username, String comment, LocalDateTime createdAt) {
         this.commentId = commentId;
         this.username = username;
         this.comment = comment;
         this.createdAt = createdAt;
+    }
+
+    public CommentResDto(Long commentId, String username, String comment, LocalDateTime createdAt, int commentLikeCount) {
+        this.commentId = commentId;
+        this.username = username;
+        this.comment = comment;
+        this.createdAt = createdAt;
+        this.commentLikeCount = commentLikeCount;
     }
 }

@@ -3,7 +3,7 @@ package com.sparta.storyindays.service;
 import com.sparta.storyindays.entity.Post;
 import com.sparta.storyindays.entity.PostLike;
 import com.sparta.storyindays.entity.User;
-import com.sparta.storyindays.repository.PostLikeRepository;
+import com.sparta.storyindays.repository.post.PostLikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
