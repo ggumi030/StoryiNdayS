@@ -28,6 +28,7 @@ Story iN dayS 는 유저들이 자신의 하루에 대한 게시글을 올려서
     - 소셜 로그인 API
 - 백오피스 (User)
     - 관리자 회원 전체조회
+- test 코드 작성
 </div>
 </details>
 
